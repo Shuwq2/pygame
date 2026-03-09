@@ -32,47 +32,36 @@ def verifier_nombre_valide(min_val,max_val,message):
 
 
 def team_name_is_valid(team_name):
-    # Boucle tant que 
-    while True:
         # Verifier si le nom est compris entre 3 et 20 charactères
-        # si le nom est inférieur ou égal à 3 
-        if len(team_name) <= 3:
-            print("Le nom de votre équipe doit contenir au moins 3 charactères")
-            return True
-        # si le nom est supérieur ou égal à 20
-        if len(team_name) >= 20:
-            print("Le nom de votre équipe peux contenir seulement 20 charactères")
-            return True
+        if len(team_name) <= 3 or len(team_name) >= 20:
+            print("Le nom de votre équipe doit contenir entre 3 et 20 charactères")
         else:
-            return False
+            return team_name
         
 
-  
-
 def ask_team_name():
-    # Demander à l'utilisateur de choisir un nom pour son équipe
-    team_name = input("Veuillez choisir un nom pour votre équipe : ")
+    # Boucle tant que pour que ça se répète si le nom n'est pas valide
+    while True :
+        # Demander à l'utilisateur de choisir un nom pour son équipe
+        team_name = input("Veuillez choisir un nom pour votre équipe : ")
+        # Vérifier si l'input est valide
+        if team_name_is_valid(team_name):
+            return team_name
+        
+        
 
-    # Vérifier que le nom de l'équipe est valide (pas vide, pas de caractères spéciaux, etc.)
-    team_name_is_valid(team_name)
 
-def create_team():
-    # Demander à l'utilisateur de choisir un nom pour son équipe
-    team_name = ask_team_name()
-    
-    # Mettre un liste des personnages dans l'équipe de l'utilisateur (vide au début)
-    team_characters = []
-    # Afficher un message de confirmation de la création de l'équipe
-    print(f"l'équipe {team_name} à bien été crée")
-    
-    
+def show_available_characters():
+    # Afficher la liste de tout les personnages disponible
+
+    # Essayer de mettre dans une liste python pour ne pas à utiliser la BD directement
+
+    ...
+ 
 
 def start_game(): 
     # Demander de crée son équipe (contient un nom valides et 3 personnages valides)
-    create_team()
-
-    # Afficher son équipe (nom, personnage choisi)
-    show_team()
+    ask_team_name()
 
     # Afficher les personnages disponibles
     show_available_characters()
@@ -111,7 +100,4 @@ def main():
         exit()
 
 
-
-
 main()
-
