@@ -1,3 +1,5 @@
+from db_init import * 
+
 def show_main_menu():
     print("=================== Bienvenue dans le jeu de combat ! ===================")
     print("1. Lancer le jeu")
@@ -47,24 +49,58 @@ def ask_team_name():
         # Vérifier si l'input est valide
         if team_name_is_valid(team_name):
             return team_name
-        
-        
-
 
 def show_available_characters():
+    i = 0
+    liste_characteres = []
     # Afficher la liste de tout les personnages disponible
+    # Prendre chaque élément de la base de donnée
+    for character in characters_collection.find({}, {"NAME": 1, "ATK": 1, "DEF": 1, "HP": 1, "_id": 0}):
+        # Ajouter les éléments dans une liste 
+        liste_characteres.append(character)
 
-    # Essayer de mettre dans une liste python pour ne pas à utiliser la BD directement
-
-    ...
+    # faire afficher un par un chaque élément de la liste 
+    for p in liste_characteres:
+        # Afficher les charactères
+        print(f"{i}.{p["NAME"]} | Attaque: {p["ATK"]} | Défense: {p["DEF"]} | Vie: {p["HP"]}")
+        i = i+1
+        
  
+def is_equipe_full(equipe):
+    # Verifier si l'équipe contient 3 membres
+    if len(equipe) == 3:
+        # Si l'équipe est complète renvoyer True
+        return True
+    # Si ne contient pas 3 membres envoie un message d'erreur ou False
+    else:
+        return False
+        
+
+def choose_characters():
+    equipe = []
+    print("=================== Choisissez votre équipe ! ===================")
+    print("Voici les personnages diponibles :")
+
+    # Faire une boucle pour que ça se répete le temps que l'équipe n'est pas complète (3 personnages)
+    while not is_equipe_full(equipe):
+        # Afficher les personnages disponibles
+        show_available_characters()
+        # Demander de choisir un personnage
+        choix = input("Veuillez choisir un personnage à ajouté dans votre équipe : ")
+        # Si le personnage est Valide
+        is_characteres_valid(choix)
+        # l'envoyer dans l'équipe
+        equipe.append(choix)
+        # le supprimé de la liste des personnages disponibles
+
+        # Sinon envoyer un message d'erreur
+        
+    
+
 
 def start_game(): 
     # Demander de crée son équipe (contient un nom valides et 3 personnages valides)
     ask_team_name()
-
-    # Afficher les personnages disponibles
-    show_available_characters()
 
     # Demander à l'utilisateur de choisir 3 personnages pour son équipe
     choose_characters()
