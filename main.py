@@ -62,8 +62,9 @@ def show_available_characters():
     # faire afficher un par un chaque élément de la liste 
     for p in liste_characteres:
         # Afficher les charactères
-        print(f"{i}.{p["NAME"]} | Attaque: {p["ATK"]} | Défense: {p["DEF"]} | Vie: {p["HP"]}")
+        print(f"{i}.{p['NAME']} | Attaque: {p['ATK']} | Défense: {p['DEF']} | Vie: {p['HP']}")
         i = i+1
+    return liste_characteres
         
  
 def is_equipe_full(equipe):
@@ -75,6 +76,18 @@ def is_equipe_full(equipe):
     else:
         return False
         
+def is_characteres_valid(choix, personnage):
+    # Vérifier si le choix est un nombre
+    if not choix.isdigit():
+        print("Veuillez rentrer un numéro valide !")
+        return False
+    
+    choix = int(choix)
+    # Vérifier si le choix correspond à un personnage
+    if choix < 0 or choix >= len(personnage):
+        print("Choix invalide")
+        return False
+    return True
 
 def choose_characters():
     equipe = []
@@ -84,16 +97,16 @@ def choose_characters():
     # Faire une boucle pour que ça se répete le temps que l'équipe n'est pas complète (3 personnages)
     while not is_equipe_full(equipe):
         # Afficher les personnages disponibles
-        show_available_characters()
+        personnage = show_available_characters()
         # Demander de choisir un personnage
         choix = input("Veuillez choisir un personnage à ajouté dans votre équipe : ")
         # Si le personnage est Valide
-        is_characteres_valid(choix)
-        # l'envoyer dans l'équipe
-        equipe.append(choix)
-        # le supprimé de la liste des personnages disponibles
-
-        # Sinon envoyer un message d'erreur
+        if is_characteres_valid(choix,personnage):
+            choix = int(choix)
+            # l'envoyer dans l'équipe
+            equipe.append(personnage[choix])
+            # le supprimé de la liste des personnages disponibles
+            personnage.pop(choix)
         
     
 
