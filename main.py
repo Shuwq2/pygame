@@ -1,4 +1,5 @@
 from db_init import * 
+import random
 
 def show_main_menu():
     print("=================== Bienvenue dans le jeu de combat ! ===================")
@@ -50,23 +51,25 @@ def ask_team_name():
         if team_name_is_valid(team_name):
             return team_name
 
-def show_available_characters():
-    i = 0
+def get_available_characters():
     liste_characteres = []
-    # Afficher la liste de tout les personnages disponible
     # Prendre chaque élément de la base de donnée
     for character in characters_collection.find({}, {"NAME": 1, "ATK": 1, "DEF": 1, "HP": 1, "_id": 0}):
         # Ajouter les éléments dans une liste 
         liste_characteres.append(character)
 
-    # faire afficher un par un chaque élément de la liste 
-    for p in liste_characteres:
-        # Afficher les charactères
-        print(f"{i}.{p['NAME']} | Attaque: {p['ATK']} | Défense: {p['DEF']} | Vie: {p['HP']}")
-        i = i+1
     return liste_characteres
         
- 
+def get_available_monster():
+    liste_monsters = []
+    # Prendre chaque élément de la base de donnée
+    for monster in monsters_collection.find({}, {"NAME": 1, "ATK": 1, "DEF": 1, "HP": 1, "_id": 0}):
+        # Ajouter les éléments dans une liste 
+        liste_monsters.append(monster)
+
+    return liste_monsters
+
+
 def is_equipe_full(equipe):
     # Verifier si l'équipe contient 3 membres
     if len(equipe) == 3:
@@ -89,26 +92,66 @@ def is_characteres_valid(choix, personnage):
         return False
     return True
 
+def show_list_choosable_characters(personnages):
+    i = 0
+    # faire afficher un par un chaque élément de la liste 
+    for p in personnages:
+        # Afficher les charactères
+        print(f"{i}.{p['NAME']} | Attaque: {p['ATK']} | Défense: {p['DEF']} | Vie: {p['HP']}")
+        i = i+1
+
 def choose_characters():
     equipe = []
     print("=================== Choisissez votre équipe ! ===================")
     print("Voici les personnages diponibles :")
-
+    # Recuperer liste des personnages de la base
+    personnages = get_available_characters()
     # Faire une boucle pour que ça se répete le temps que l'équipe n'est pas complète (3 personnages)
     while not is_equipe_full(equipe):
         # Afficher les personnages disponibles
-        personnage = show_available_characters()
-        # Demander de choisir un personnage
-        choix = input("Veuillez choisir un personnage à ajouté dans votre équipe : ")
-        # Si le personnage est Valide
-        if is_characteres_valid(choix,personnage):
+        show_list_choosable_characters(personnages)
+        # Demander de choisir un personnages
+        choix = input("Veuillez choisir un personnages à ajouté dans votre équipe : ")
+        # Si le personnages est Valide
+        if is_characteres_valid(choix,personnages):
             choix = int(choix)
             # l'envoyer dans l'équipe
-            equipe.append(personnage[choix])
-            # le supprimé de la liste des personnages disponibles
-            personnage.pop(choix)
-        
-    
+            equipe.append(personnages[choix])
+            # le supprimé de la liste des personnagess disponibles
+            personnages.pop(choix)
+    return equipe
+
+def get_random_monster():
+    monsters = get_available_monster()
+    monsters_random = random.choices(monsters, k=1)
+    return monsters_random
+
+def start_fight():
+    ...
+
+def start_battles():
+    vague = 1
+    # qui va selectionner l'équipe
+    equipe = choose_characters()
+    # choisir un ennemi aléatoirement
+    ennemi = get_random_monster()
+
+    # Faire un systeme Tour par tour 
+    start_fight()
+
+    # En cas de victoire (quand l'ennemi est mort)
+    if ennemi_isdead():
+    # lancer une autre vague
+        vague += 1
+        # supprimé l'ancien ennemi de la liste des ennemie
+        get_random_monster()
+    else:
+        # Si l'équipe meurt finir la partie
+        if equipe_isdead() == True:
+            #enregistrer le score
+            get_score()
+            #renvoyer au menu principal        
+ 
 
 
 def start_game(): 
@@ -118,14 +161,9 @@ def start_game():
     # Demander à l'utilisateur de choisir 3 personnages pour son équipe
     choose_characters()
 
-    # Vérifier si les personnages choisis sont valides (existent dans la base de données, pas de doublons, etc.)
-    choose_characters_is_valid()
-
     # Lancer les combats
     start_battles()
    
-
-
 
 def main():
     # Afficher le menu principal
@@ -149,4 +187,3 @@ def main():
         exit()
 
 
-main()
