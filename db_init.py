@@ -27,12 +27,23 @@ def add_monster(NAME: str, ATK: int, DEF: int, HP: int):
         "DEF": DEF,
         "HP": HP
     }
-    characters_collection.insert_one(new_monster)
+    monsters_collection.insert_one(new_monster)
 
 
 def add_attemps(NAME, vague, characters):
+    new_attemp = {
+        "NAME": NAME,
+        "VAGUE": vague,
+        "CHARACTERS": characters
+    }
+    attemps_collection.insert_one(new_attemp)
 
-    ...
+
+def get_all_attemps():
+    liste_attemps = []
+    for attemp in attemps_collection.find({}, {"NAME": 1, "VAGUE": 1, "CHARACTERS": 1, "_id": 0}).sort("VAGUE", -1):
+        liste_attemps.append(attemp)
+    return liste_attemps
 
 
 
