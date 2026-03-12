@@ -2,11 +2,11 @@ from db_init import *
 import random
 
 def show_main_menu():
-    print("=================== Bienvenue dans le jeu de combat ! ===================")
+    print("\n=================== Bienvenue dans le jeu de combat ! ===================\n")
     print("1. Lancer le jeu")
     print("2. Afficher le tableau des scores")
     print("3. Quitter")
-    print("==========================================================\n")
+    print("\n==========================================================\n")
 
 def is_valid(saisie, max_val, min_val):
     if not saisie.isnumeric():
@@ -103,11 +103,11 @@ def show_available_characters(personnages):
 
 def choose_characters():
     equipe = []
-    print("\n=================== Choisissez votre équipe ! ===================")
+    print("\n=================== Choisissez votre équipe ! ===================\n")
     print("Voici les personnages diponibles :")
     # Recuperer liste des personnages de la base
     personnages = get_available_characters()
-    print("==========================================================\n")
+    print("\n==========================================================\n")
     # Faire une boucle pour que ça se répete le temps que l'équipe n'est pas complète (3 personnages)
     while not is_equipe_full(equipe):
         # Afficher les personnages disponibles
@@ -163,7 +163,7 @@ def count_damage(attaquant, defenseur):
 
 def show_etat_fight(equipe, ennemi):
     # Afficher la vie de l'équipe 
-    print("\n=================== État du combat ===================")
+    print("\n=================== État du combat ===================\n")
     for membre in equipe:
         print(f"  {membre['NAME']} | HP: {membre['HP']}")
     # Afficher la vie de l'ennemi
@@ -190,7 +190,7 @@ def ennemi_hit_equipe(equipe, ennemi):
         print(f"{membre['NAME']} est mort !")
 
 def start_fight(equipe, ennemi):
-    print(f"\n=================== Combat contre {ennemi['NAME']} ! ===================")
+    print(f"\n=================== Combat contre {ennemi['NAME']} ! ===================\n")
     # Boucle du combat jusqu'a la mort de l'ennemi ou de l'équipe
     while not ennemi_is_dead(ennemi) and not equipe_is_dead(equipe):
         # Afficher la vie de l'équipe et du boss
@@ -221,10 +221,11 @@ def enregistrer_score(team_name, vague, equipe):
 
 
 def show_equipe(team_name, equipe):
-    print(f"\n=================== Équipe {team_name} ===================")
+    # Afficher chaque membre de l'équipe
+    print(f"\n=================== Équipe {team_name} ===================\n")
     for membre in equipe:
         print(f"  {membre['NAME']} | ATK: {membre['ATK']} | DEF: {membre['DEF']} | HP: {membre['HP']}")
-    print("==========================================================\n")
+    print("\n==========================================================\n")
 
 
 def start_battles(equipe, team_name):
@@ -232,7 +233,7 @@ def start_battles(equipe, team_name):
     liste_monstres = get_available_monster()
     # Boucle tant que pour que le combat continue tant qu'une des deux conditions n'est pas remplie
     while True:
-        print(f"\n=================== Vague {vague} ===================")
+        print(f"\n=================== Vague {vague} ===================\n")
         
         # choisir un ennemi aléatoirement
         ennemi = get_random_monster(liste_monstres)
@@ -243,7 +244,7 @@ def start_battles(equipe, team_name):
         # En cas de victoire quand l'ennemi est mort
         if equipe_is_dead(equipe):
             # Si l'équipe meurt finir la partie
-            print("\n=================== Vous avez perdu ! ===================")
+            print("\n=================== Vous avez perdu ! ===================\n")
             print(f"Votre équipe est morte à la vague {vague} !")
             break
             
@@ -270,9 +271,17 @@ def start_game():
    
 def show_board():
     # Récuperer tout les scores 
+    scores = get_all_attemps()
     # Si il n'y a pas de score, afficher un message
+    if len(scores) == 0:
+        print("Vous n'avez pas de scores disponible !")
     # Sinon on affiche les différents scores un par un
-    ...
+    else:
+        for score in scores:
+            print("\n=================== ScoreBoard ===================\n")
+            print(f"{score['NAME']} | Vague: {score['VAGUE']} | membre: {score['CHARACTERS']}")
+            print("\n==========================================================\n")
+
 
 def main():
     while True:
